@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    # Montamos el código fuente para que los cambios se reflejen sin reconstruir la imagen
+    volumes:
+      - .:/app
+      # Este volumen "fantasma" protege el node_modules interno del contenedor.
+      # Sin esto, el volumen anterior sobreescribiría la carpeta node_modules
+      # del contenedor con la de tu máquina (que puede ser diferente o no existir).
+      - /app/node_modules
+    # Variable de entorno para que Jest no coloree la salida en el log
+    environment:
+      - CI=true
+    # DNS de Google para evitar bloqueos de red institucionales
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
